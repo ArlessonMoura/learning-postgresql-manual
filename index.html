@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostgreSQL: Guia Prático do Zero ao Avançado</title>
+    <meta
+      name="description"
+      content="Guia de aprendizado interativo de PostgreSQL, em oito módulos, do fundamento teórico ao projeto prático em C."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PostgreSQL: Guia Prático do Zero ao Avançado" />
+    <meta
+      property="og:description"
+      content="Manual de estudos em PostgreSQL com fundamentos, SQL avançado, transações, performance, JSONB, PL/pgSQL e integração em C."
+    />
+    <meta property="og:image" content="/og-image.svg" />
+    <meta property="og:image:alt" content="Capa do projeto PG//GUIA — PostgreSQL: Guia Prático do Zero ao Avançado" />
+    <meta property="og:site_name" content="PG//GUIA" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PostgreSQL: Guia Prático do Zero ao Avançado" />
+    <meta
+      name="twitter:description"
+      content="Guia prático de PostgreSQL do zero ao avançado com módulos de teoria e prática."
+    />
+    <meta name="twitter:image" content="/og-image.svg" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Tipografia: display retro-futurista + corpo geométrico + mono para código -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ===================== NAVBAR SUPERIOR (mobile-first) ===================== -->
+    <nav class="topbar d-flex align-items-center justify-content-between px-3 px-md-4">
+      <div class="d-flex align-items-center gap-3">
+        <a
+          href="#home"
+          class="topbar__brand d-flex align-items-center gap-2 text-decoration-none"
+          data-nav-home-top
+        >
+          <span class="topbar__brand-mark">PG</span
+          ><span class="topbar__brand-slash">//</span
+          ><span class="topbar__brand-word">GUIA</span>
+        </a>
+        <a
+          href="#home"
+          class="topbar__home d-none d-sm-inline-flex align-items-center gap-2 text-decoration-none"
+          data-nav-home-top
+        >
+          <i class="bi bi-house-door" aria-hidden="true"></i> <span>Home</span>
+        </a>
+      </div>
+      <button
+        class="hamburger"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#navOffcanvas"
+        aria-controls="navOffcanvas"
+        aria-label="Abrir menu de módulos"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <!-- ===================== OFFCANVAS DE NAVEGAÇÃO (esquerda) ===================== -->
+    <div
+      class="offcanvas offcanvas-start neon-offcanvas"
+      tabindex="-1"
+      id="navOffcanvas"
+      aria-labelledby="navOffcanvasLabel"
+    >
+      <div class="offcanvas-header">
+        <h2 class="offcanvas-title" id="navOffcanvasLabel">Módulos do Guia</h2>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        <a href="#home" class="nav-home d-flex align-items-center gap-2" data-nav-home>
+          <i class="bi bi-house-door" aria-hidden="true"></i> Página inicial
+        </a>
+        <ul class="module-nav list-unstyled flex-grow-1" id="moduleNav" role="list">
+          <!-- Itens de navegação inseridos dinamicamente via main.js -->
+        </ul>
+        <p class="offcanvas-footnote text-muted small mb-0">
+          PostgreSQL: Guia Prático do Zero ao Avançado
+        </p>
+      </div>
+    </div>
+
+    <!-- ===================== HERO / LANDING PAGE ===================== -->
+    <!-- Visão exclusiva de entrada: some (d-none) assim que um módulo é aberto. -->
+    <header
+      id="hero"
+      class="hero d-flex flex-column align-items-center justify-content-center text-center position-relative overflow-hidden"
+    >
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="hero__sun" aria-hidden="true"></div>
+      <div class="hero__scanline" aria-hidden="true"></div>
+
+      <div class="hero__content position-relative px-3 px-md-4">
+        <p class="hero__eyebrow">Engenharia de Dados · Aprendizado Prático</p>
+        <h1 class="hero__title">
+          <span class="hero__title-line">POSTGRESQL</span>
+          <span class="hero__title-line hero__title-line--accent">GUIA PRÁTICO</span>
+          <span class="hero__title-line">DO ZERO AO AVANÇADO</span>
+        </h1>
+        <p class="hero__typing">
+          <span id="heroTyping"></span
+          ><span class="hero__cursor" aria-hidden="true"></span>
+        </p>
+        <p class="hero__subtitle mx-auto">
+          Oito módulos, do modelo relacional de Edgard F. Codd à integração em C via
+          <code>libpq</code> — teoria com rigor acadêmico, prática com código funcional e
+          comentado.
+        </p>
+        <div
+          class="hero__cta d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3"
+        >
+          <button type="button" class="btn-neon btn-neon--primary" data-start-reading>
+            <i class="bi bi-play-fill" aria-hidden="true"></i> Iniciar Leitura
+          </button>
+          <button
+            type="button"
+            class="btn-neon btn-neon--ghost"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#navOffcanvas"
+            aria-controls="navOffcanvas"
+          >
+            <i class="bi bi-list-ul" aria-hidden="true"></i> Ver Módulos
+          </button>
+        </div>
+      </div>
+
+      <div class="hero__scrolldown text-muted small" aria-hidden="true">
+        <i class="bi bi-chevron-double-down"></i>
+      </div>
+    </header>
+
+    <!-- ===================== CONTEÚDO PRINCIPAL (LEITOR DE MÓDULOS) ===================== -->
+    <!-- Escondido por padrão: só aparece quando um módulo é selecionado. -->
+    <main id="app" class="app-main d-none">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-10 col-xl-8">
+            <nav
+              class="module-pager d-flex align-items-center justify-content-between flex-wrap gap-2"
+              aria-label="Navegação entre módulos"
+            >
+              <button type="button" class="pager-btn" data-pager="prev" disabled>
+                <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                <span data-pager-prev-label>Anterior</span>
+              </button>
+              <span class="pager-current text-muted small" data-pager-current></span>
+              <button type="button" class="pager-btn" data-pager="next" disabled>
+                <span data-pager-next-label>Próximo</span>
+                <i class="bi bi-chevron-right" aria-hidden="true"></i>
+              </button>
+            </nav>
+
+            <article id="content" class="content-panel" aria-live="polite">
+              <div
+                class="content-loading d-flex flex-column align-items-center justify-content-center gap-3 text-muted"
+              >
+                <div class="loader-ring" aria-hidden="true"></div>
+                <p>Carregando módulo…</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===================== FOOTER OBRIGATÓRIO ===================== -->
+    <footer class="site-footer">
+      <div
+        class="container site-footer__inner d-flex flex-column flex-md-row align-items-start align-items-md-center gap-3"
+      >
+        <img
+          class="site-footer__avatar"
+          src="https://github.com/ArlessonMoura.png"
+          alt="Avatar de Arlesson Moura"
+          loading="lazy"
+        />
+        <div class="site-footer__content">
+          <p class="site-footer__credit">Feito por <strong>Arlesson Moura</strong></p>
+          <p class="site-footer__message">
+            Encontrou um erro ou tem uma ideia de melhoria? Compartilhe uma contribuição
+            no
+            <a
+              href="git@github.com:ArlessonMoura/learning-postgresql-manual.git"
+              target="_blank"
+              rel="noreferrer"
+              >repositório do projeto</a
+            >.
+          </p>
+          <hr class="site-footer__divider" />
+          <p>
+            Quer apoiar o projeto com um cafezinho? Qualquer valor ajuda! <br />
+            Chave Pix aleatória:
+            <span class="site-footer__pix d-inline-flex align-items-center gap-2">
+              <strong id="pix-key">c3a60690-0083-4705-b374-a199d9cee412</strong>
+              <button
+                class="btn btn-link site-footer__copy-pix p-0"
+                type="button"
+                data-copy-pix
+                aria-label="Copiar chave Pix"
+                title="Copiar chave Pix"
+              >
+                <i class="bi bi-clipboard" aria-hidden="true"></i>
+              </button>
+            </span>
+            <br />
+            Banco Itaú — Arlesson Moura Santana da Silva.
+          </p>
+          <div class="site-footer__links">
+            <a
+              class="d-inline-flex align-items-center gap-2"
+              href="https://www.linkedin.com/in/arlesson-moura/"
+              target="_blank"
+              rel="noreferrer"
+              ><i class="bi bi-linkedin" aria-hidden="true"></i>LinkedIn</a
+            >
+            <a
+              class="d-inline-flex align-items-center gap-2"
+              href="https://github.com/ArlessonMoura"
+              target="_blank"
+              rel="noreferrer"
+              ><i class="bi bi-github" aria-hidden="true"></i>GitHub</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>

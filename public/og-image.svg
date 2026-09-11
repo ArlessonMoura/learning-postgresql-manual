@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Gradiente do Fundo Dark Vaporwave -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0813"/>
+      <stop offset="50%" stop-color="#160826"/>
+      <stop offset="100%" stop-color="#05030a"/>
+    </linearGradient>
+
+    <!-- Gradiente de Texto Neon / Synthwave -->
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f3ff"/>
+      <stop offset="50%" stop-color="#ff007f"/>
+      <stop offset="100%" stop-color="#9d4edd"/>
+    </linearGradient>
+
+    <!-- Efeito Glow (Brilho Neon) -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Efeito Glow Suave para Linhas de Fundo -->
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Fundo Principal -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Grade Retro-Futurista (Perspective Grid - Estilo Vaporwave) -->
+  <g opacity="0.15" filter="url(#softGlow)" stroke="#ff007f" stroke-width="1.5">
+    <!-- Linhas Horizontais com Perspectiva -->
+    <line x1="0" y1="450" x2="1200" y2="450" />
+    <line x1="0" y1="480" x2="1200" y2="480" />
+    <line x1="0" y1="520" x2="1200" y2="520" />
+    <line x1="0" y1="570" x2="1200" y2="570" />
+    <line x1="0" y1="630" x2="1200" y2="630" />
+
+    <!-- Linhas Diagonais/Fuga -->
+    <line x1="600" y1="420" x2="-200" y2="630" />
+    <line x1="600" y1="420" x2="100" y2="630" />
+    <line x1="600" y1="420" x2="400" y2="630" />
+    <line x1="600" y1="420" x2="800" y2="630" />
+    <line x1="600" y1="420" x2="1100" y2="630" />
+    <line x1="600" y1="420" x2="1400" y2="630" />
+  </g>
+
+  <!-- Círculo Solar / Horizon Synthwave -->
+  <circle cx="600" cy="380" r="160" fill="#ff007f" opacity="0.08" filter="url(#glow)"/>
+
+  <!-- Moldura Externa Neon -->
+  <rect x="30" y="30" width="1140" height="570" rx="16" fill="none" stroke="#00f3ff" stroke-width="2" opacity="0.4" filter="url(#softGlow)"/>
+
+  <!-- Título Principal -->
+  <text x="100" y="210" fill="url(#neonGradient)" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="64" letter-spacing="-1" filter="url(#glow)">
+    PostgreSQL
+  </text>
+  
+  <!-- Subtítulo -->
+  <text x="100" y="280" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="42" opacity="0.95">
+    Guia Prático do Zero ao Avançado
+  </text>
+
+  <!-- Descrição -->
+  <text x="100" y="340" fill="#a0a0b0" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="22">
+    Conceitos de SGBD, ACID, SQL vs NoSQL, Práticas de Segurança e Projeto de Conclusão.
+  </text>
+
+  <!-- Rodapé do Card OG (Autor & Techs) -->
+  <g transform="translate(100, 490)">
+    <!-- Ícone decorativo terminal -->
+    <text x="0" y="22" fill="#00f3ff" font-family="monospace" font-weight="bold" font-size="28" filter="url(#glow)">&gt;_</text>
+    <text x="45" y="20" fill="#f8f9fa" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="20">
+      Por Arlesson Moura
+    </text>
+    
+    <!-- Pills de Tecnologias -->
+    <g transform="translate(450, -5)">
+      <rect x="0" y="0" width="120" height="32" rx="8" fill="#120c1f" stroke="#00f3ff" stroke-width="1"/>
+      <text x="60" y="21" fill="#00f3ff" font-family="sans-serif" font-weight="bold" font-size="13" text-anchor="middle">PostgreSQL</text>
+
+      <rect x="135" y="0" width="60" height="32" rx="8" fill="#120c1f" stroke="#ff007f" stroke-width="1"/>
+      <text x="165" y="21" fill="#ff007f" font-family="sans-serif" font-weight="bold" font-size="13" text-anchor="middle">C</text>
+    </g>
+  </g>
+</svg>

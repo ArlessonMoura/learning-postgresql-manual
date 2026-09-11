@@ -1,0 +1,21 @@
+{
+  "name": "learning-postgresql-manual",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SPA de documentação interativa — PostgreSQL: Guia Prático do Zero ao Avançado — tema Dark Vaporwave.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "marked": "^12.0.2",
+    "prismjs": "^1.29.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.8"
+  }
+}
