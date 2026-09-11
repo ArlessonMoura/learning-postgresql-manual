@@ -1,7 +1,7 @@
 # PG//GUIA — PostgreSQL: Guia Prático do Zero ao Avançado
 
 <p align="center">
-  <img src="./public/og-image.svg" alt="Banner do manual PG//GUIA" width="1200" />
+  <img src="./public/og-image.png" alt="Banner do manual PG//GUIA" width="1200" />
 </p>
 
 Este projeto nasceu de uma ideia simples e poderosa: transformar o PostgreSQL em
