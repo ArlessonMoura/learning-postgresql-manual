@@ -2,13 +2,13 @@
 
 ## Módulo 1 — Fundamentos de Dados, SGBDs e Arquitetura de Software
 
-> **Nota de padronização**: este manual usa linguagem agnóstica de linguagem de programação. Os exemplos práticos de integração (Módulos 6 e 8) usarão C com libpq. Neste módulo teórico, comparações com C aparecerão apenas em notas pontuais, quando houver alinhamento técnico realmente relevante (ex.: tipos primitivos e structs).
+> **Nota de padronização**: este manual usa linguagem agnóstica de linguagem de programação. Os exemplos práticos de integração (Módulos 7 e 9) usarão C com libpq. Neste módulo teórico, comparações com C aparecerão apenas em notas pontuais, quando houver alinhamento técnico realmente relevante (ex.: tipos primitivos e structs).
 
 ---
 
 ### 1.1 O que são Dados, Informação e SGBD
 
-> _"Programs must be written for people to read, and only incidentally for machines to execute."_ — Harold Abelson
+> "**Programs must be written for people to read, and only incidentally for machines to execute.**" — _Harold Abelson_
 >
 > Um banco de dados é, antes de tudo, um programa.
 
@@ -23,18 +23,20 @@ Persistência é a capacidade de um dado sobreviver ao encerramento do processo 
 - Falhas de hardware (parcialmente, via replicação/backup);
 - Reinicializações do sistema operacional.
 
+**O que é persistência primitiva?** É a técnica de salvar manualmente o estado de um programa em um arquivo, como um texto, CSV ou binário, para que os dados possam ser lidos novamente depois que o processo terminar. Ela garante apenas a sobrevivência básica dos bytes gravados; não oferece, por si só, transações, controle de concorrência, busca eficiente, validação de relacionamentos, recuperação automática após falhas ou permissões granulares.
+
 **Nota técnica (C)**: um `struct` em C, mesmo com dados relacionais implícitos (ex.: um `struct Pedido` contendo um `int id_cliente` que referencia outro struct), existe apenas no heap/stack do processo. Se você `fwrite()` esse struct em um arquivo binário, você tem persistência _primitiva_, mas nenhuma das garantias abaixo (ACID, controle de concorrência, integridade referencial automática). Um SGBD como o PostgreSQL formaliza e automatiza tudo o que, em C, você teria que reimplementar manualmente e com alto risco de bugs.
 
 #### ACID
 
 ACID é o conjunto de quatro garantias que um SGBD transacional (como o PostgreSQL) oferece para que transações sejam confiáveis mesmo diante de falhas ou concorrência:
 
-| Propriedade      | Significado                                                                                                                                                      | Exemplo prático                                                                                                                                                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **A**tomicidade  | Uma transação é tudo-ou-nada. Se qualquer parte falhar, tudo é desfeito.                                                                                         | Transferência bancária: debitar de A e creditar em B ocorrem juntos, ou nenhum ocorre.                                                                            |
-| **C**onsistência | A transação leva o banco de um estado válido para outro estado válido, respeitando regras/constraints.                                                           | Um saldo não pode ficar negativo se há um `CHECK (saldo >= 0)`.                                                                                                   |
-| **I**solamento   | Transações concorrentes não devem interferir umas nas outras de forma indevida.                                                                                  | Duas pessoas comprando o último item em estoque não podem ambas "ganhar" a compra.                                                                                |
-| **D**urabilidade | Uma vez confirmada (`COMMIT`), a transação persiste mesmo que o sistema caia logo em seguida, considerando a configuração padrão de sincronização do PostgreSQL. | Após o `COMMIT`, o WAL foi sincronizado em disco, salvo configurações excepcionais como `fsync = off`, `synchronous_commit = off` ou o uso de tabelas `UNLOGGED`. |
+| Propriedade      | Significado                                                                                            | Exemplo prático                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| **A**tomicidade  | Uma transação é tudo-ou-nada. Se qualquer parte falhar, tudo é desfeito.                               | Transferência bancária: debitar de A e creditar em B ocorrem juntos, ou nenhum ocorre. |
+| **C**onsistência | A transação leva o banco de um estado válido para outro estado válido, respeitando regras/constraints. | Um saldo não pode ficar negativo se há um `CHECK (saldo >= 0)`.                        |
+| **I**solamento   | Transações concorrentes não devem interferir umas nas outras de forma indevida.                        | Duas pessoas comprando o último item em estoque não podem ambas "ganhar" a compra.     |
+| **D**urabilidade | Uma vez confirmada (`COMMIT`), a transação persiste mesmo que o sistema caia logo em seguida.          | Após o `COMMIT`, os dados já estão gravados no _Write-Ahead Log (WAL)_ em disco.       |
 
 **Diagrama ASCII — Ciclo ACID de uma transação:**
 
@@ -291,5 +293,3 @@ A denormalização deve ser sempre uma **decisão consciente e documentada**, nu
 6. Aproveitar recursos híbridos do PostgreSQL (JSONB) para flexibilidade pontual sem abrir mão da integridade relacional do restante do schema.
 
 ---
-
-_Fim do Módulo 1. Aguardando confirmação para prosseguir ao Módulo 2 — Instalação Guiada, Configuração e Boas Práticas._

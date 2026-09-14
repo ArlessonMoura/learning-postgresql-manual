@@ -1,6 +1,6 @@
 # Manual Definitivo do PostgreSQL: Do Zero ao Avançado
 
-## Módulo 4 — DQL: Consultas e Segurança em Primeiro Lugar
+## Módulo 5 — DQL: Consultas e Segurança em Primeiro Lugar
 
 > Este é o módulo mais crítico do manual em termos de segurança. Todo o conhecimento de consultas apresentado aqui deve ser lido em conjunto com a seção final sobre SQL Injection — a forma de montar uma consulta é tão importante quanto a consulta em si.
 
@@ -195,13 +195,13 @@ JOIN clientes_vip cv ON cv.cliente_id = c.id
 ORDER BY pp.total_gasto DESC;
 ```
 
-CTEs também suportam recursividade (`WITH RECURSIVE`), útil para percorrer estruturas hierárquicas (ex.: árvores de categorias, organogramas) — tema que será retomado nos Recursos Avançados (Módulo 5).
+CTEs também suportam recursividade (`WITH RECURSIVE`), útil para percorrer estruturas hierárquicas (ex.: árvores de categorias, organogramas) — tema que será retomado nos Recursos Avançados (Módulo 6).
 
 ---
 
 ### 4.4 Ameaça e Defesa contra SQL Injection
 
-Esta seção deve ser lida com atenção redobrada: **SQL Injection** figura consistentemente entre as vulnerabilidades mais críticas e mais exploradas em aplicações web (categorizada dentro de "Injection" no OWASP Top 10 historicamente e, na edição de 2021, sob "A03:2021 – Injection").
+Esta seção deve ser lida com atenção redobrada: **SQL Injection** figura consistentemente entre as vulnerabilidades mais críticas e mais exploradas em aplicações web (categorizada dentro de "Injection" no OWASP Top 10 historicamente, e hoje sob "A03:2021 – Injection").
 
 #### O que é SQL Injection
 
@@ -227,8 +227,7 @@ O exemplo abaixo é **deliberadamente inseguro** — apresentado exclusivamente 
 /*
  * ❌ CÓDIGO VULNERÁVEL — NÃO REPRODUZIR EM PRODUÇÃO
  * Constrói a query concatenando a entrada do usuário diretamente
- * na string SQL usando sprintf(). Além do SQL Injection, o uso de
- * sprintf() sem limite também pode causar estouro do buffer.
+ * na string SQL usando sprintf().
  */
 #include <stdio.h>
 #include <libpq-fe.h>
@@ -337,11 +336,9 @@ Independentemente da linguagem de programação usada na aplicação, o princíp
 1. Adotar Prepared Statements / consultas parametrizadas como **padrão absoluto e não-negociável** em toda a base de código, sem exceções "só desta vez".
 2. Tratar qualquer entrada oriunda do usuário (formulários, parâmetros de URL, headers, arquivos) como não confiável por padrão, mesmo que pareça inofensiva.
 3. Utilizar CTEs (`WITH`) para decompor consultas complexas em blocos nomeados e legíveis, facilitando manutenção e revisão de código.
-4. Medir consultas com `EXPLAIN ANALYZE` (aprofundado no Módulo 7) antes de assumir que uma query com `JOIN`s múltiplos ou `OFFSET` alto terá boa performance em produção.
+4. Medir consultas com `EXPLAIN ANALYZE` (aprofundado no Módulo 8) antes de assumir que uma query com `JOIN`s múltiplos ou `OFFSET` alto terá boa performance em produção.
 5. Preferir `UNION ALL` a `UNION` sempre que a deduplicação não for estritamente necessária, evitando o custo computacional extra da remoção de duplicatas.
 6. Realizar revisões de código focadas especificamente em pontos de construção dinâmica de SQL, tratando qualquer concatenação de string com SQL como um alerta automático de segurança em code review.
 7. Combinar defesa em profundidade: mesmo usando Prepared Statements, aplicar também o Princípio do Menor Privilégio nos roles do banco (Módulo 2), para limitar o dano de qualquer vulnerabilidade que, apesar de tudo, venha a existir.
 
 ---
-
-_Fim do Módulo 4. Aguardando confirmação para prosseguir ao Módulo 5 — Recursos Avançados do PostgreSQL._

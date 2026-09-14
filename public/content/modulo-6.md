@@ -1,6 +1,6 @@
 # Manual Definitivo do PostgreSQL: Do Zero ao Avançado
 
-## Módulo 6 — Programação no Banco e Integração com C
+## Módulo 7 — Programação no Banco e Integração com C
 
 > Este módulo tem duas metades complementares: primeiro, como escrever lógica _dentro_ do PostgreSQL usando PL/pgSQL e Triggers; depois, como uma aplicação externa em C se conecta e conversa com o banco através da `libpq`, encerrando o ciclo entre "lógica no banco" e "lógica na aplicação" discutido desde o Módulo 1.
 
@@ -41,7 +41,7 @@ SELECT calcular_valor_com_desconto(200.00, 15);  -- retorna 170.00
 
 #### Stored Procedures
 
-Diferente de funções, **Procedures** (introduzidas formalmente no PostgreSQL 11) podem conter controle transacional interno (`COMMIT`/`ROLLBACK` dentro do próprio corpo), desde que o `CALL` não esteja dentro de um bloco de transação explícito, e são invocadas via `CALL`, não `SELECT`:
+Diferente de funções, **Procedures** (introduzidas formalmente no PostgreSQL 11) podem conter controle transacional interno (`COMMIT`/`ROLLBACK` dentro do próprio corpo) e são invocadas via `CALL`, não `SELECT`:
 
 ```sql
 CREATE OR REPLACE PROCEDURE processar_pagamento_pedido(
@@ -267,9 +267,9 @@ PGconn *conectar_banco(void) {
 
 > **Boa prática de segurança**: nunca hardcode a senha diretamente na string de conexão em código versionado. Em produção, a `conninfo` deve ser montada a partir de variáveis de ambiente ou de um gerenciador de segredos (ex.: `getenv("DB_PASSWORD")`), nunca de um literal no código-fonte.
 
-#### `PQexecParams` — executando consultas parametrizadas
+#### `PQexecParams` — executando consultas parametrizadas (Prepared Statements)
 
-Retomando diretamente o Módulo 4: toda interação com dados vindos do "mundo exterior" (usuário, arquivo, rede) **deve** usar consultas parametrizadas, como `PQexecParams`, nunca concatenação manual de string. Para prepared statements nomeados e reutilizáveis, a `libpq` oferece `PQprepare` e `PQexecPrepared`.
+Retomando diretamente o Módulo 5: toda interação com dados vindos do "mundo exterior" (usuário, arquivo, rede) **deve** usar `PQexecParams`, nunca concatenação manual de string.
 
 ```c
 /*
@@ -293,7 +293,7 @@ int inserir_cliente(PGconn *conn, const char *nome, const char *email) {
         0           // resultado também em formato texto
     );
 
-    if (res == NULL || PQresultStatus(res) != PGRES_TUPLES_OK) {
+    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
         fprintf(stderr, "Erro ao inserir cliente: %s\n", PQerrorMessage(conn));
         PQclear(res);   // libera memória mesmo em caso de erro
         return -1;
@@ -321,7 +321,7 @@ void listar_clientes_por_status(PGconn *conn, int ativo) {
 
     PGresult *res = PQexecParams(conn, query, 1, NULL, valores, NULL, NULL, 0);
 
-    if (res == NULL || PQresultStatus(res) != PGRES_TUPLES_OK) {
+    if (PQresultStatus(res) != PGRES_TUPLES_OK) {
         fprintf(stderr, "Erro na consulta: %s\n", PQerrorMessage(conn));
         PQclear(res);
         return;
@@ -413,5 +413,3 @@ void encerrar_conexao(PGconn *conn) {
 7. Envolver toda a lógica de acesso a dados em C com verificação explícita de cada retorno de função da `libpq` (`PQstatus`, `PQresultStatus`), tratando falhas de forma previsível em vez de assumir o caminho feliz.
 
 ---
-
-_Fim do Módulo 6. Aguardando confirmação para prosseguir ao Módulo 7 — Performance, Indexação e Manutenção._

@@ -19,7 +19,7 @@ projeto e das melhores práticas de banco de dados.
 
 ## O que você vai encontrar
 
-- fundamentos de bancos de dados e modelagem relacional
+- fundamentos de bancos de dados e modelagem relacional com DER, cardinalidade e planejamento
 - SQL do básico ao avançado
 - controle de integridade e normalização
 - consultas complexas, joins e subconsultas

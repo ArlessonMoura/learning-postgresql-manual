@@ -1,6 +1,6 @@
 # Manual Definitivo do PostgreSQL: Do Zero ao Avançado
 
-## Módulo 5 — Recursos Avançados do PostgreSQL
+## Módulo 6 — Recursos Avançados do PostgreSQL
 
 > Este módulo apresenta os recursos que diferenciam o PostgreSQL de um SGBD relacional "genérico": Window Functions para análises sofisticadas, JSONB para flexibilidade semiestruturada, Views para abstração, e o controle fino de concorrência via níveis de isolamento transacional.
 
@@ -74,7 +74,7 @@ SELECT
 FROM pedidos;
 ```
 
-Um caso de uso analítico clássico (retomado no projeto do Módulo 8): calcular o **top N por grupo** — por exemplo, os 3 produtos mais vendidos de cada categoria — algo que seria muito mais verboso sem Window Functions:
+Um caso de uso analítico clássico (retomado no projeto do Módulo 9): calcular o **top N por grupo** — por exemplo, os 3 produtos mais vendidos de cada categoria — algo que seria muito mais verboso sem Window Functions:
 
 ```sql
 WITH ranking_vendas AS (
@@ -194,9 +194,7 @@ REFRESH MATERIALIZED VIEW mv_vendas_por_categoria;
 REFRESH MATERIALIZED VIEW CONCURRENTLY mv_vendas_por_categoria;
 ```
 
-`REFRESH MATERIALIZED VIEW CONCURRENTLY` exige um índice `UNIQUE` adequado (sem predicado `WHERE`) e não pode ser executado dentro de um bloco de transação explícito.
-
-A escolha entre View e Materialized View é, essencialmente, um trade-off entre **atualidade do dado** (View: sempre atual) e **velocidade de leitura** (Materialized View: instantânea, porém potencialmente desatualizada) — típico de cenários analíticos (dashboards, relatórios) onde uma pequena defasagem (ex.: atualizar a cada hora via job agendado) é aceitável em troca de performance.
+A escolha entre View e Materialized View é, essencialmente, um trade-off entre **atualidade do dado** (View: sempre atual) e **velocidade de leitura** (Materialized View: instantânea, porém potencialmemte desatualizada) — típico de cenários analíticos (dashboards, relatórios) onde uma pequena defasagem (ex.: atualizar a cada hora via job agendado) é aceitável em troca de performance.
 
 ---
 
@@ -248,12 +246,12 @@ O padrão SQL define quatro níveis de isolamento, que controlam o quanto uma tr
    Read Uncommitted -- Read Committed -- Repeatable Read -- Serializable
 ```
 
-> **Nota específica do PostgreSQL**: o PostgreSQL não implementa `Read Uncommitted` de fato — mesmo solicitando esse nível, o comportamento observado é equivalente a `Read Committed`, pois o MVCC do PostgreSQL (aprofundado no Módulo 7) nunca expõe dados de transações não confirmadas a outras sessões.
+> **Nota específica do PostgreSQL**: o PostgreSQL não implementa `Read Uncommitted` de fato — mesmo solicitando esse nível, o comportamento observado é equivalente a `Read Committed`, pois o MVCC do PostgreSQL (aprofundado no Módulo 8) nunca expõe dados de transações não confirmadas a outras sessões.
 
 | Nível                       | Anomalia evitada                                                         | Comportamento no PostgreSQL                                                                                                                                                                                                                                                                                   |
 | --------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Read Committed** (padrão) | Dirty Read                                                               | Cada instrução `SELECT` dentro da transação enxerga o estado dos dados **confirmado no momento daquela instrução específica** — instruções diferentes na mesma transação podem ver dados diferentes se houver commits concorrentes entre elas.                                                                |
-| **Repeatable Read**         | Dirty Read + Non-Repeatable Read                                         | Toda a transação enxerga uma "fotografia" (snapshot) única, estabelecida na primeira instrução relevante da transação — múltiplos `SELECT`s da mesma linha sempre retornam o mesmo resultado dentro da transação, mesmo que outras transações façam commits nesse meio-tempo.                                 |
+| **Repeatable Read**         | Dirty Read + Non-Repeatable Read                                         | Toda a transação enxerga uma "fotografia" (snapshot) única, tirada no início da transação — múltiplos `SELECT`s da mesma linha sempre retornam o mesmo resultado dentro da transação, mesmo que outras transações façam commits nesse meio-tempo.                                                             |
 | **Serializable**            | Todas as anomalias, incluindo _Phantom Read_ e anomalias de serialização | Garante que o resultado de transações concorrentes seja equivalente a alguma execução serial (uma de cada vez) das mesmas transações — implementado via detecção de conflitos (SSI - Serializable Snapshot Isolation), podendo abortar uma transação com erro de serialização, exigindo retry pela aplicação. |
 
 ```sql
@@ -275,8 +273,6 @@ SELECT quantidade FROM estoque WHERE produto_id = 5 FOR UPDATE;
 UPDATE estoque SET quantidade = quantidade - 1 WHERE produto_id = 5;
 COMMIT;
 ```
-
-`FOR UPDATE` bloqueia operações concorrentes de atualização ou de locking da mesma linha até o fim da transação; um `SELECT` comum ainda pode ler uma versão visível pelo MVCC.
 
 ---
 
@@ -303,5 +299,3 @@ COMMIT;
 7. Usar `SAVEPOINT` para lógica transacional complexa com múltiplas etapas que podem falhar independentemente, evitando descartar uma transação inteira por causa de uma única etapa recuperável.
 
 ---
-
-_Fim do Módulo 5. Aguardando confirmação para prosseguir ao Módulo 6 — Programação no Banco e Integração com C._

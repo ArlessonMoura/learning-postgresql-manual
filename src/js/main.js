@@ -5,31 +5,60 @@
 // efeito de digitação no HERO e cópia da chave Pix.
 // ============================================================
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '../styles/main.css';
 
 import { marked } from 'marked';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-sql.js';
-import 'prismjs/components/prism-c.js';
 import 'prismjs/components/prism-bash.js';
+import 'prismjs/components/prism-c.js';
 import 'prismjs/components/prism-json.js';
+import 'prismjs/components/prism-sql.js';
+import 'prismjs/themes/prism-tomorrow.css';
 
 /* ------------------------------------------------------------
- * 1. Metadados dos 8 módulos
+ * 1. Metadados dos 9 módulos
  * ---------------------------------------------------------- */
 const MODULES = [
-  { id: 1, file: '/content/modulo-1.md', title: 'Fundamentos de Dados, SGBDs e Arquitetura de Software' },
-  { id: 2, file: '/content/modulo-2.md', title: 'Instalação Guiada, Configuração e Boas Práticas' },
-  { id: 3, file: '/content/modulo-3.md', title: 'DDL e DML — Manipulação Fundamental de Dados' },
-  { id: 4, file: '/content/modulo-4.md', title: 'DQL — Consultas e Segurança em Primeiro Lugar' },
-  { id: 5, file: '/content/modulo-5.md', title: 'Recursos Avançados do PostgreSQL' },
-  { id: 6, file: '/content/modulo-6.md', title: 'Programação no Banco e Integração com C' },
-  { id: 7, file: '/content/modulo-7.md', title: 'Performance, Indexação e Manutenção' },
-  { id: 8, file: '/content/modulo-8.md', title: 'Projeto Prático Guiado e Arquitetura Real' }
+  {
+    id: 1,
+    file: '/content/modulo-1.md',
+    title: 'Fundamentos de Dados, SGBDs e Arquitetura de Software',
+  },
+  {
+    id: 2,
+    file: '/content/modulo-2.md',
+    title: 'Instalação Guiada, Configuração e Boas Práticas',
+  },
+  {
+    id: 3,
+    file: '/content/modulo-modelagem.md',
+    title: 'Modelagem Relacional, DER e Planejamento de Bancos SQL',
+  },
+  {
+    id: 4,
+    file: '/content/modulo-3.md',
+    title: 'DDL e DML — Manipulação Fundamental de Dados',
+  },
+  {
+    id: 5,
+    file: '/content/modulo-4.md',
+    title: 'DQL — Consultas e Segurança em Primeiro Lugar',
+  },
+  { id: 6, file: '/content/modulo-5.md', title: 'Recursos Avançados do PostgreSQL' },
+  {
+    id: 7,
+    file: '/content/modulo-6.md',
+    title: 'Programação no Banco e Integração com C',
+  },
+  { id: 8, file: '/content/modulo-7.md', title: 'Performance, Indexação e Manutenção' },
+  {
+    id: 9,
+    file: '/content/modulo-8.md',
+    title: 'Projeto Prático Guiado e Arquitetura Real',
+  },
 ];
 
 const cache = new Map();
@@ -40,7 +69,7 @@ const cache = new Map();
  * ---------------------------------------------------------- */
 marked.setOptions({
   gfm: true,
-  breaks: false
+  breaks: false,
 });
 
 /* ------------------------------------------------------------
@@ -169,7 +198,7 @@ function updatePager(currentIndex) {
  * 6.b Paginação própria inserida ao final de cada módulo
  * Ocupa exatamente o lugar onde antes aparecia o texto residual
  * "Fim do Módulo X. Aguardando confirmação...". Botão "Anterior"
- * desabilitado no Módulo 1; "Próximo" leva até o Módulo 8, onde
+ * desabilitado no Módulo 1; "Próximo" leva até o Módulo 9, onde
  * fica desabilitado.
  * ---------------------------------------------------------- */
 function buildBottomPagerHTML(currentIndex) {
@@ -342,7 +371,11 @@ document.querySelectorAll('[data-nav-home], [data-nav-home-top]').forEach((el) =
 /* ------------------------------------------------------------
  * 8. Efeito de digitação no HERO
  * ---------------------------------------------------------- */
-function typeEffect(el, phrases, { typeSpeed = 55, deleteSpeed = 28, pause = 1800 } = {}) {
+function typeEffect(
+  el,
+  phrases,
+  { typeSpeed = 55, deleteSpeed = 28, pause = 1800 } = {},
+) {
   let phraseIndex = 0;
   let charIndex = 0;
   let deleting = false;
@@ -434,12 +467,14 @@ function init() {
   setupPixCopy();
   respectMotionPreference();
 
-  bsOffcanvas = window.bootstrap ? window.bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl) : null;
+  bsOffcanvas = window.bootstrap
+    ? window.bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl)
+    : null;
 
   typeEffect(document.getElementById('heroTyping'), [
-    'CREATE TABLE conhecimento (nivel TEXT DEFAULT \'avançado\');',
+    "CREATE TABLE conhecimento (nivel TEXT DEFAULT 'avançado');",
     'SELECT * FROM boas_praticas WHERE seguranca = TRUE;',
-    '// libpq: PQexecParams() — zero SQL Injection.'
+    '// libpq: PQexecParams() — zero SQL Injection.',
   ]);
 
   // Estado inicial: respeita o hash da URL. Sem hash (ou "#home"),

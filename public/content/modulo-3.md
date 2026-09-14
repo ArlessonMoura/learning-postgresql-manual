@@ -1,6 +1,6 @@
 # Manual Definitivo do PostgreSQL: Do Zero ao Avançado
 
-## Módulo 3 — DDL e DML: Manipulação Fundamental de Dados
+## Módulo 4 — DDL e DML: Manipulação Fundamental de Dados
 
 > A partir deste módulo, o manual passa a apresentar código funcional. Todo SQL aqui é executável em uma instância PostgreSQL padrão (versão 13+). Notas técnicas em C aparecem destacadas, sem interromper o fluxo conceitual principal.
 
@@ -83,7 +83,7 @@ TRUNCATE TABLE pedidos RESTART IDENTITY;
 
 #### Mapeamento de tipos: PostgreSQL ↔ C
 
-Esta tabela é a referência que será usada em todos os exemplos práticos de integração com `libpq` (Módulos 6 e 8):
+Esta tabela é a referência que será usada em todos os exemplos práticos de integração com `libpq` (Módulos 7 e 9):
 
 | Tipo PostgreSQL             | Tipo C equivalente (via libpq)                                     | Observação                                                                                                                                                                                                     |
 | --------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -152,7 +152,7 @@ WHERE data_cadastro < NOW() - INTERVAL '5 years'
 RETURNING id, nome;
 ```
 
-> **Boa prática crítica**: `UPDATE` e `DELETE` sem `WHERE` afetam **100% das linhas da tabela**. É extremamente recomendado, em ambientes de produção, sempre iniciar validando o filtro com um `SELECT` equivalente antes de rodar o `UPDATE`/`DELETE` real, e considerar rodar dentro de uma transação explícita (`BEGIN` ... `COMMIT`) para poder reverter em caso de erro (tema aprofundado no Módulo 5).
+> **Boa prática crítica**: `UPDATE` e `DELETE` sem `WHERE` afetam **100% das linhas da tabela**. É extremamente recomendado, em ambientes de produção, sempre iniciar validando o filtro com um `SELECT` equivalente antes de rodar o `UPDATE`/`DELETE` real, e considerar rodar dentro de uma transação explícita (`BEGIN` ... `COMMIT`) para poder reverter em caso de erro (tema aprofundado no Módulo 6).
 
 #### `UPSERT` — `INSERT ... ON CONFLICT`
 
@@ -231,7 +231,7 @@ Ao executar: DELETE FROM clientes WHERE id = 1;
 -- CASCADE: ao apagar o cliente, seus pedidos são apagados junto
 cliente_id BIGINT REFERENCES clientes(id) ON DELETE CASCADE
 
--- RESTRICT: impede a exclusão explicitamente
+-- RESTRICT (comportamento padrão se omitido): impede a exclusão
 -- do cliente enquanto houver pedidos vinculados
 cliente_id BIGINT REFERENCES clientes(id) ON DELETE RESTRICT
 
@@ -240,9 +240,7 @@ cliente_id BIGINT REFERENCES clientes(id) ON DELETE RESTRICT
 cliente_id BIGINT REFERENCES clientes(id) ON DELETE SET NULL
 ```
 
-Quando a cláusula `ON DELETE` é omitida, o comportamento padrão no PostgreSQL é `NO ACTION`; neste exemplo, `RESTRICT` foi declarado explicitamente.
-
-A escolha correta depende inteiramente da regra de negócio: em um sistema de e-commerce (tema do projeto do Módulo 8), normalmente **não** se usa `CASCADE` para excluir pedidos junto com clientes (perderia-se histórico financeiro/fiscal); prefere-se, na prática, nem sequer excluir fisicamente o cliente, mas sim marcá-lo como inativo (soft delete) — um padrão comum na indústria justamente para evitar a perda irreversível de dados historicamente relevantes.
+A escolha correta depende inteiramente da regra de negócio: em um sistema de e-commerce (tema do projeto do Módulo 9), normalmente **não** se usa `CASCADE` para excluir pedidos junto com clientes (perderia-se histórico financeiro/fiscal); prefere-se, na prática, nem sequer excluir fisicamente o cliente, mas sim marcá-lo como inativo (soft delete) — um padrão comum na indústria justamente para evitar a perda irreversível de dados historicamente relevantes.
 
 ---
 
@@ -269,5 +267,3 @@ A escolha correta depende inteiramente da regra de negócio: em um sistema de e-
 7. Padronizar, na camada de integração em C, funções utilitárias centralizadas de conversão de tipos (string → `int`, string → `bool`, string → `NUMERIC`/decimal), evitando repetir lógica de parsing espalhada pelo código.
 
 ---
-
-_Fim do Módulo 3. Aguardando confirmação para prosseguir ao Módulo 4 — DQL: Consultas e Segurança em Primeiro Lugar._

@@ -222,9 +222,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
   GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app_user;
 ```
 
-`ALTER DEFAULT PRIVILEGES` afeta somente objetos criados posteriormente pelo role que executa o comando (a menos que `FOR ROLE` seja especificado); não altera automaticamente os privilégios de objetos criados por outros roles.
-
-> **Por que isso importa**: se a aplicação for comprometida (ex.: via uma vulnerabilidade de SQL Injection, tema do Módulo 4), o dano potencial fica limitado ao que aquele role específico pode fazer. Um `app_user` sem permissão de `DROP TABLE` ou `CREATE ROLE` reduz drasticamente o "raio de explosão" de um ataque bem-sucedido — este é o Princípio do Menor Privilégio aplicado a bancos de dados.
+> **Por que isso importa**: se a aplicação for comprometida (ex.: via uma vulnerabilidade de SQL Injection, tema do Módulo 5), o dano potencial fica limitado ao que aquele role específico pode fazer. Um `app_user` sem permissão de `DROP TABLE` ou `CREATE ROLE` reduz drasticamente o "raio de explosão" de um ataque bem-sucedido — este é o Princípio do Menor Privilégio aplicado a bancos de dados.
 
 #### Vinculação correta do IP (`listen_addresses`)
 
@@ -269,7 +267,7 @@ O `psql` é indispensável para automação (scripts `.sql` executados via `psql
 
 | Ferramenta  | Características                                                                                                                                                                                                              |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **pgAdmin** | Ferramenta open source de administração do PostgreSQL. Foco total em PostgreSQL: editor SQL, visualizador de planos de execução (`EXPLAIN`), gerenciamento visual de roles/schemas/tablespaces.                              |
+| **pgAdmin** | Interface oficial da comunidade PostgreSQL. Foco total em PostgreSQL: editor SQL, visualizador de planos de execução (`EXPLAIN`), gerenciamento visual de roles/schemas/tablespaces.                                         |
 | **DBeaver** | Cliente genérico multi-banco (suporta PostgreSQL, MySQL, Oracle etc.). Interface mais moderna, útil para quem trabalha com múltiplos SGBDs no dia a dia, com recursos de ER-diagram automático a partir do schema existente. |
 
 Ambas as ferramentas se conectam usando os mesmos parâmetros de rede que o `psql` (host, porta, banco, usuário, senha), respeitando as mesmas regras definidas em `pg_hba.conf`.
@@ -335,5 +333,3 @@ Entender a hierarquia de objetos do PostgreSQL é essencial antes de criar qualq
 7. Documentar a arquitetura de roles e permissões do cluster, especialmente em ambientes com múltiplos databases e múltiplas aplicações compartilhando a mesma instância.
 
 ---
-
-_Fim do Módulo 2. Aguardando confirmação para prosseguir ao Módulo 3 — DDL e DML: Manipulação Fundamental de Dados._

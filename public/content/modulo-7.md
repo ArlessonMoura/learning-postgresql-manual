@@ -1,6 +1,6 @@
 # Manual Definitivo do PostgreSQL: Do Zero ao Avançado
 
-## Módulo 7 — Performance, Indexação e Manutenção
+## Módulo 8 — Performance, Indexação e Manutenção
 
 > Este módulo trata do PostgreSQL "por dentro": como os dados são fisicamente localizados através de índices, como interpretar o que o otimizador de consultas realmente faz, e como o mecanismo de concorrência do PostgreSQL (MVCC) exige manutenção contínua para não degradar com o tempo.
 
@@ -41,7 +41,7 @@ CREATE INDEX idx_clientes_email_hash ON clientes USING HASH (email);
 #### GIN (Generalized Inverted Index)
 
 ```sql
--- Já apresentado no Módulo 5, para colunas JSONB
+-- Já apresentado no Módulo 6, para colunas JSONB
 CREATE INDEX idx_produtos_atributos ON produtos USING GIN (atributos);
 
 -- Também amplamente usado para busca textual completa (Full-Text Search)
@@ -121,7 +121,7 @@ Execution Time: 3.298 ms
 - **`cost=X..Y`**: estimativa relativa de custo (não é tempo real) — `X` é o custo até a primeira linha, `Y` é o custo total estimado.
 - **`actual time=X..Y`**: tempo **real** medido em milissegundos (só aparece com `ANALYZE`), igualmente de "primeira linha" até "total".
 - **`rows=N`**: número de linhas estimado (na parte `cost`) ou realmente retornado (na parte `actual`) — uma grande divergência entre estimado e real é um sinal de estatísticas desatualizadas (ver `ANALYZE`, seção 7.3).
-- **`Seq Scan`**: varredura sequencial completa da tabela — pode indicar ausência de índice útil, mas também pode ser a escolha correta quando a tabela é pequena ou o filtro tem baixa seletividade.
+- **`Seq Scan`**: varredura sequencial completa da tabela — um alerta em tabelas grandes, geralmente indicando ausência de índice útil para aquele filtro.
 - **`Index Scan` / `Index Only Scan`**: uso de um índice — geralmente desejável para filtros seletivos em tabelas grandes.
 
 ```sql
@@ -164,7 +164,7 @@ O PostgreSQL não sobrescreve uma linha diretamente ao atualizá-la. Em vez diss
    +----+--------+-------+-------+
 ```
 
-Cada transação enxerga apenas as versões de linha que são "visíveis" para o seu snapshot (conforme o nível de isolamento, Módulo 5) — é assim que o PostgreSQL implementa isolamento sem exigir locks de leitura tradicionais na maioria dos casos.
+Cada transação enxerga apenas as versões de linha que são "visíveis" para o seu snapshot (conforme o nível de isolamento, Módulo 6) — é assim que o PostgreSQL implementa isolamento sem exigir locks de leitura tradicionais na maioria dos casos.
 
 #### `VACUUM`
 
@@ -211,7 +211,7 @@ Estatísticas desatualizadas (ex.: após uma carga massiva de dados) fazem o oti
      "úteis" justificariam
    - Consultas ficam progressivamente mais lentas ao longo do tempo,
      mesmo sem crescimento real proporcional no volume de dados úteis
-   - Índices também podem sofrer bloat próprio, exigindo diagnóstico e, quando indicado, `REINDEX`
+   - Índices também sofrem bloat próprio, exigindo REINDEX periódico
 ```
 
 ```sql
@@ -253,5 +253,3 @@ REINDEX TABLE pedidos;
 7. Revisar periodicamente o tamanho físico das tabelas e índices mais críticos, tratando bloat como uma métrica de saúde do banco a ser monitorada continuamente, não apenas investigada reativamente quando já causou lentidão perceptível.
 
 ---
-
-_Fim do Módulo 7. Aguardando confirmação para prosseguir ao Módulo 8 — Projeto Prático Guiado e Arquitetura Real._
